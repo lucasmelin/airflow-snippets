@@ -1,0 +1,39 @@
+{
+    "name": "airflow-snippets",
+    "displayName": "Airflow Snippets",
+    "description": "Apache Airflow snippets for VSCode",
+    "author": "lucasmelin",
+    "publisher": "lucasmelin",
+    "icon": "img/logo.png",
+    "license": "MIT",
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.58.0"
+    },
+    "keywords": [
+        "python",
+        "snippet",
+        "airflow",
+        "apache airflow"
+    ],
+    "categories": [
+        "Programming Languages",
+        "Snippets"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lucasmelin/airflow-snippets"
+    },
+    "bugs": {
+        "url": "https://github.com/lucasmelin/airflow-snippets/issues",
+        "email": "lucas.melin@gmail.com"
+    },
+    "contributes": {
+        "snippets": [
+            {
+                "language": "python",
+                "path": "./snippets/snippets.code-snippets"
+            }
+        ]
+    }
+}

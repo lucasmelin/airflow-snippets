@@ -1,0 +1,149 @@
+{
+    "Airflow DAG": {
+        "prefix": "with DAG",
+        "body": [
+            "with DAG(",
+            "    '${1:tutorial}',",
+            "    default_args=default_args,",
+            "    description='${2:A simple tutorial DAG}',",
+            "    schedule_interval=${3:timedelta(days=1)},",
+            "    start_date=${4:days_ago(2)},",
+            "    tags=[${5:'example'}],",
+            ") as dag:",
+        ]
+    },
+    "Bash Operator": {
+        "prefix": "BashOperator",
+        "body": [
+            "${1:bash_task} = BashOperator(",
+            "    task_id=\"${1:bash_task}\",",
+            "    bash_command='${2:echo \"Hi from bash operator\"}',",
+            "    # env: Optional[Dict[str, str]] = None,",
+            "    # output_encoding: str = 'utf-8',",
+            "    # skip_exit_code: int = 99,",
+            ")"
+        ]
+    },
+    "Python Operator": {
+        "prefix": "PythonOperator",
+        "body": [
+            "${1:python_task} = PythonOperator(",
+            "    task_id=\"${1:python_task}\",",
+            "    python_callable=${2:lambda: print('Hi from python operator')},",
+            "    # op_kwargs: Optional[Dict] = None,",
+            "    # op_args: Optional[List] = None,",
+            "    # templates_dict: Optional[Dict] = None",
+            "    # templates_exts: Optional[List] = None",
+            ")"
+        ]
+    },
+    "Branch Python Operator": {
+        "prefix": "BranchPythonOperator",
+        "body": [
+            "${1:python_task} = BranchPythonOperator(",
+            "    task_id=\"${1:python_task}\",",
+            "    python_callable=${2:lambda: 'first_branch'},",
+            "    # op_kwargs: Optional[Dict] = None,",
+            "    # op_args: Optional[List] = None,",
+            "    # templates_dict: Optional[Dict] = None",
+            "    # templates_exts: Optional[List] = None",
+            ")",
+            "",
+            "${3:first_branch} = DummyOperator(",
+            "    task_id='${3:first_branch}'",
+            ")",
+            "${4:second_branch} = DummyOperator(",
+            "    task_id='${4:second_branch}'",
+            ")",
+            "",
+            "${1:python_task} >> [${3:first_branch}, ${4:second_branch}]"
+        ]
+    },
+    "Short Circuit Operator": {
+        "prefix": "ShortCircuitOperator",
+        "body": [
+            "${1:shortcircuit_task} = ShortCircuitOperator(",
+            "    task_id=\"${1:shortcircuit_task}\",",
+            "    python_callable=${2:lambda: True},",
+            "    # op_kwargs: Optional[Dict] = None,",
+            "    # op_args: Optional[List] = None,",
+            "    # templates_dict: Optional[Dict] = None",
+            "    # templates_exts: Optional[List] = None",
+            ")",
+            "",
+            "${3:skip_if_shortcircuit_false} = DummyOperator(",
+            "    task_id='${3:skip_if_shortcircuit_false}'",
+            ")",
+            "",
+            "${1:shortcircuit_task} >> ${3:skip_if_shortcircuit_false}"
+        ]
+    },
+    "Python Virtualenv Operator": {
+        "prefix": "PythonVirtualenvOperator",
+        "body": [
+            "${1:virtualenv_task} = PythonVirtualenvOperator(",
+            "    task_id=\"${1:virtualenv_task}\",",
+            "    python_callable=${2:callable_task},",
+            "    requirements=[\"${3:colorama==0.4.4}\"],",
+            "    python_version='${4:3.9}'",
+            "    system_site_packages=False,",
+            "    # use_dill: bool = False,",
+            "    # string_args: Optional[List] = None",
+            "    # op_kwargs: Optional[Dict] = None,",
+            "    # op_args: Optional[List] = None,",
+            "    # templates_dict: Optional[Dict] = None",
+            "    # templates_exts: Optional[List] = None",
+            ")",
+        ]
+    },
+    "Branch DateTime Operator": {
+        "prefix": "BranchDateTimeOperator",
+        "body": [
+            "${1:branchdatetime_task} = BranchDateTimeOperator(",
+            "    task_id=\"${1:branchdatetime_task}\",",
+            "    follow_task_ids_if_true=['${2:date_in_range}'],",
+            "    follow_task_ids_if_false=['${3:date_outside_range}'],",
+            "    target_upper=datetime.datetime(${4:2020, 10, 10, 15, 0, 0}),",
+            "    target_lower=datetime.datetime(${5: 2020, 10, 10, 14, 0, 0}),",
+            "    # op_kwargs: Optional[Dict] = None,",
+            "    # op_args: Optional[List] = None,",
+            "    # templates_dict: Optional[Dict] = None",
+            "    # templates_exts: Optional[List] = None",
+            ")",
+            "",
+            "${2:date_in_range} = DummyOperator(",
+            "    task_id='${2:date_in_range}'",
+            ")",
+            "${3:date_outside_range} = DummyOperator(",
+            "    task_id='${3:date_outside_range}'",
+            ")",
+            "",
+            "${1:branchdatetime_task} >> [${2:date_in_range}, ${3:date_outside_range}]"
+        ]
+    },
+    "Branch Day Of Week Operator": {
+        "prefix": "BranchDayOfWeekOperator",
+        "body": [
+            "${1:branchdayofweek_task} = BranchDayOfWeekOperator(",
+            "    task_id=\"${1:branchdayofweek_task}\",",
+            "    follow_task_ids_if_true=['${2:branch_true}'],",
+            "    follow_task_ids_if_false=['${3:branch_false}'],",
+            "    week_day=\"${4:Monday}\",",
+            "    # op_kwargs: Optional[Dict] = None,",
+            "    # op_args: Optional[List] = None,",
+            "    # templates_dict: Optional[Dict] = None",
+            "    # templates_exts: Optional[List] = None",
+            ")",
+            "",
+            "${2:branch_true} = DummyOperator(",
+            "    task_id='${2:branch_true}'",
+            ")",
+            "${3:branch_false} = DummyOperator(",
+            "    task_id='${3:branch_false}'",
+            ")",
+            "",
+            "# Run ${2:branch_true} if ${1:branchdayofweek_task} executes on ${4:Monday}",
+            "${1:branchdayofweek_task} >> [${2:branch_true}, ${3:branch_false}]"
+        ]
+    },
+}
