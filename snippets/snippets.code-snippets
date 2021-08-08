@@ -146,4 +146,78 @@
             "${1:branchdayofweek_task} >> [${2:branch_true}, ${3:branch_false}]"
         ]
     },
+    "Dummy Operator": {
+        "prefix": "DummyOperator",
+        "body": [
+            "${1:dummy_task} = DummyOperator(",
+            "    task_id=\"${1:dummy_task}\",",
+            "    # ui_color='#e8f7e4'",
+            ")",
+        ]
+    },
+    "Email Operator": {
+        "prefix": "EmailOperator",
+        "body": [
+            "${1:email_task} = EmailOperator(",
+            "    task_id=\"${1:email_task}\",",
+            "    to=['${2:user@example.com}'],",
+            "    subject=\"${3:Hello from Airflow!}\",",
+            "    html_content=\"${4:<i>Message from Airflow</i>}\",",
+            "    cc=['${5:admin@example.com}'],",
+            "    bcc=['${6:audit@example.com}'],",
+            "    # files=['${7:file1.txt}'],",
+            "    # mime_subtype: str = 'mixed',",
+            "    # mime_charset: str = 'utf-8',",
+            "    # conn_id: Optional[str] = None,",
+            ")",
+        ]
+    },
+    "Generic Transfer Operator": {
+        "prefix": "GenericTransferOperator",
+        "body": [
+            "${1:generictransfer_task} = GenericTransferOperator(",
+            "    task_id=\"${1:generictransfer_task}\",",
+            "    sql=\"${2:SELECT * FROM USERS;}\",",
+            "    destination_table=\"${3:USERS_BACKUP}\",",
+            "    source_conn_id=\"${4:src_conn}\",",
+            "    destination_conn_id=\"${5:dest_conn}\",",
+            "    preoperator=[\"${6:CREATE TABLE USERS_BACKUP;}\"],",
+            ")",
+        ]
+    },
+    "Simple Http Operator (POST)": {
+        "prefix": "SimpleHttpOperator - Post",
+        "body": [
+            "${1:simplehttp_task} = SimpleHttpOperator(",
+            "    task_id=\"${1:simplehttp_task}\",",
+            "    http_conn_id=\"${2:http_conn}\",",
+            "    endpoint='${3:post}',",
+            "    data=json.dumps(${4:{\"priority\": 5\\}}),",
+            "    headers={\"Content-Type\": \"application/json\"},",
+            "    # response_check=${5:lambda response: response.json()['json']['priority'] == 5},",
+            "    # response_filter=${6:lambda response: json.loads(response.text)},",
+            "    # extra_options: Optional[Dict[str, Any]] = None,",
+            "    # log_response: bool = False,",
+            "    # auth_type: Type[AuthBase] = HTTPBasicAuth,",
+            ")",
+        ]
+    },
+    "Simple Http Operator (GET)": {
+        "prefix": "SimpleHttpOperator - Get",
+        "body": [
+            "${1:simplehttp_task} = SimpleHttpOperator(",
+            "    task_id=\"${1:simplehttp_task}\",",
+            "    http_conn_id=\"${2:http_conn}\",",
+            "    method='GET',",
+            "    endpoint='${4:get}',",
+            "    data={\"${5:param1}\": \"${6:value1}\"},",
+            "    headers={\"Content-Type\": \"application/json\"},",
+            "    # response_check=${7:lambda response: response.json()['json']['priority'] == 5},",
+            "    # response_filter=${8:lambda response: json.loads(response.text)},",
+            "    # extra_options: Optional[Dict[str, Any]] = None,",
+            "    # log_response: bool = False,",
+            "    # auth_type: Type[AuthBase] = HTTPBasicAuth,",
+            ")",
+        ]
+    },
 }
